@@ -20,7 +20,7 @@ function GithubRepoSearch() {
   const [orderBy, setOrderBy] = useState<string | undefined>(undefined);
   const [page, setPage] = useState<number>(1);
 
-  const debouncedQuery = useDebounce(query, 500);
+  const debouncedQuery = useDebounce<typeof query>(query, 500);
 
   const { error, data, isLoading, isFetching } = useRepoSearch(
     debouncedQuery,
@@ -32,52 +32,59 @@ function GithubRepoSearch() {
 
   return (
     <div className="flex flex-col gap-8 items-center w-[600px]">
-      <header className="flex flex-col gap-4 ">
-        <Input
-          type="text"
-          placeholder="Search repositories..."
-          className=""
-          onChange={(e) => {
-            setQuery(e.target.value);
-          }}
-        />
-        <div className="flex gap-4 justify-between">
-          <Dropdown
-            label="Items per page"
-            items={[
-              { value: "10", label: "10" },
-              { value: "20", label: "20" },
-              { value: "30", label: "30" },
-            ]}
-            value={String(itemsPerPage)}
-            onChange={(value) => {
-              setItemsPerPage(Number(value));
+      <header>
+        <form
+          onSubmit={(e) => e.preventDefault()}
+          className="flex flex-col gap-4"
+        >
+          <Input
+            type="text"
+            placeholder="Search repositories..."
+            className=""
+            onChange={(e) => {
+              setQuery(e.target.value);
             }}
           />
-          <Dropdown
-            label="Sort by"
-            items={[
-              { value: "best-match", label: "Best Match" },
-              { value: "stars", label: "Stars" },
-              { value: "updated", label: "Most Updated" },
-            ]}
-            value={sortBy}
-            onChange={(value) => {
-              setSortBy(value);
-            }}
-          />
-          <Dropdown
-            label="Order by"
-            items={[
-              { value: "desc", label: "Descending" },
-              { value: "asc", label: "Ascending" },
-            ]}
-            value={orderBy}
-            onChange={(value) => {
-              setOrderBy(value);
-            }}
-          />
-        </div>
+          <div className="flex gap-4 justify-between">
+            <Dropdown
+              label="Items per page"
+              items={[
+                { value: "10", label: "10" },
+                { value: "20", label: "20" },
+                { value: "30", label: "30" },
+              ]}
+              value={String(itemsPerPage)}
+              onChange={(value) => {
+                setItemsPerPage(Number(value));
+              }}
+            />
+            <Dropdown
+              label="Sort by"
+              items={[
+                { value: " ", label: "Best Match" },
+                { value: "forks", label: "Forks" },
+                { value: "help-wanted-issues", label: "Help Wanted Issues" },
+                { value: "stars", label: "Stars" },
+                { value: "updated", label: "Most Updated" },
+              ]}
+              value={sortBy}
+              onChange={(value) => {
+                setSortBy(value);
+              }}
+            />
+            <Dropdown
+              label="Order by"
+              items={[
+                { value: "desc", label: "Descending" },
+                { value: "asc", label: "Ascending" },
+              ]}
+              value={orderBy}
+              onChange={(value) => {
+                setOrderBy(value);
+              }}
+            />
+          </div>
+        </form>
       </header>
       <div className="flex flex-col gap-4 relative w-full">
         {isFetching && (

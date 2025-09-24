@@ -15,7 +15,14 @@ function RepoRow({ repo }: { repo: GithubRepository }) {
       <span>{repo.description}</span>
       <span className="flex gap-4 font-medium text-sm text-gray-400">
         <span>{repo.stargazers_count} stars</span>
-        <span>Updated on {repo.updated_at}</span>
+        <span>
+          Updated on{" "}
+          {new Intl.DateTimeFormat("en-us", {
+            dateStyle: "full",
+            timeStyle: "long",
+            timeZone: "America/Los_Angeles",
+          }).format(new Date(repo.updated_at))}
+        </span>
       </span>
     </Card>
   );
